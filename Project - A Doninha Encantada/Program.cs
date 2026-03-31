@@ -20,18 +20,18 @@ namespace A_Doninha_Encantada_Painel
             // --- Itens para testar na loja, se quiser usar, selecionar todos com o mouse e apertar (Ctrl + ;) ---
 
             // --- EQUIPAMENTOS ---
-            produtoEstoque.Add(new Equipamento("EQ01", "Espada Longa de Ferro", 150.00m, 75, "Arma Corpo-a-Corpo"));
-            produtoEstoque.Add(new Equipamento("EQ02", "Escudo de Carvalho Anfíbio", 45.00m, 112, "Defesa Mão Secundária"));
-            produtoEstoque.Add(new Equipamento("EQ03", "Armadura Escamas de Dragão", 1250.00m, 92, "Armadura Pesada"));
-            produtoEstoque.Add(new Equipamento("EQ04", "Cajado da Estrela Cadente", 320.50m, 81, "Arma Mágica"));
-            produtoEstoque.Add(new Equipamento("EQ05", "Botas Aladas de Hermes", 150.00m, 0, "Acessório Mágico"));
+            // produtoEstoque.Add(new Equipamento("EQ01", "Espada Longa de Ferro", 150.00m, 75, "Arma Corpo-a-Corpo"));
+            // produtoEstoque.Add(new Equipamento("EQ02", "Escudo de Carvalho Anfíbio", 45.00m, 112, "Defesa Mão Secundária"));
+            // produtoEstoque.Add(new Equipamento("EQ03", "Armadura Escamas de Dragão", 1250.00m, 92, "Armadura Pesada"));
+            // produtoEstoque.Add(new Equipamento("EQ04", "Cajado da Estrela Cadente", 320.50m, 81, "Arma Mágica"));
+            // produtoEstoque.Add(new Equipamento("EQ05", "Botas Aladas de Hermes", 150.00m, 0, "Acessório Mágico"));
 
-            // --- CONSUMÍVEIS ---
-            produtoEstoque.Add(new Consumivel("CS01", "Poção de Cura Menor", 25.50m, 30, "Cura 50 HP"));
-            produtoEstoque.Add(new Consumivel("CS02", "Elixir da Invisibilidade", 200.00m, 30, "Invisibilidade por 3 turnos"));
-            produtoEstoque.Add(new Consumivel("CS03", "Pergaminho: Bola de Fogo", 120.00m, 50, "Dano em Área (Fogo)"));
-            produtoEstoque.Add(new Consumivel("CS04", "Ração de Viagem Elfica", 5.50m, 50, "Cura 10 HP e remove Fome"));
-            produtoEstoque.Add(new Consumivel("CS05", "Lágrima de Fênix", 5000.00m, 10, "Ressurreição Completa"));
+            // // --- CONSUMÍVEIS ---
+            // produtoEstoque.Add(new Consumivel("CS01", "Poção de Cura Menor", 25.50m, 30, "Cura 50 HP"));
+            // produtoEstoque.Add(new Consumivel("CS02", "Elixir da Invisibilidade", 200.00m, 30, "Invisibilidade por 3 turnos"));
+            // produtoEstoque.Add(new Consumivel("CS03", "Pergaminho: Bola de Fogo", 120.00m, 50, "Dano em Área (Fogo)"));
+            // produtoEstoque.Add(new Consumivel("CS04", "Ração de Viagem Elfica", 5.50m, 50, "Cura 10 HP e remove Fome"));
+            // produtoEstoque.Add(new Consumivel("CS05", "Lágrima de Fênix", 5000.00m, 10, "Ressurreição Completa"));
 
             int opcoes;
             do
