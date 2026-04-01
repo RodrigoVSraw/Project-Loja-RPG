@@ -13,9 +13,9 @@ namespace A_Doninha_Encantada_Painel
         static void Main(string[] args)
         {
             // Instância da classe "ProdutoRPG" para armazenar os produtos do estoque
-            GerenciaLists lists = new GerenciaLists();
-
+            GerenciaLists lists = new GerenciaLists();           
             int opcoes;
+
             do
             {
                 // Painel de opções para o usuário escolher entre as funcionalidades do sistema
