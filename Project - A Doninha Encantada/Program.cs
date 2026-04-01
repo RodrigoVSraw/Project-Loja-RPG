@@ -13,25 +13,7 @@ namespace A_Doninha_Encantada_Painel
         static void Main(string[] args)
         {
             // Instância da classe "ProdutoRPG" para armazenar os produtos do estoque
-            List<ProdutoRPG> produtoEstoque = new List<ProdutoRPG>(); 
-            List<Venda> vendasRealizadas = new List<Venda>();
-
-
-            // --- Itens para testar na loja, se quiser usar, selecionar todos com o mouse e apertar (Ctrl + ;) ---
-
-            // --- EQUIPAMENTOS ---
-            produtoEstoque.Add(new Equipamento("EQ01", "Espada Longa de Ferro", 150.00m, 75, "Arma Corpo-a-Corpo"));
-            produtoEstoque.Add(new Equipamento("EQ02", "Escudo de Carvalho Anfíbio", 45.00m, 112, "Defesa Mão Secundária"));
-            produtoEstoque.Add(new Equipamento("EQ03", "Armadura Escamas de Dragão", 1250.00m, 92, "Armadura Pesada"));
-            produtoEstoque.Add(new Equipamento("EQ04", "Cajado da Estrela Cadente", 320.50m, 81, "Arma Mágica"));
-            produtoEstoque.Add(new Equipamento("EQ05", "Botas Aladas de Hermes", 150.00m, 0, "Acessório Mágico"));
-
-            // --- CONSUMÍVEIS ---
-            produtoEstoque.Add(new Consumivel("CS01", "Poção de Cura Menor", 25.50m, 30, "Cura 50 HP"));
-            produtoEstoque.Add(new Consumivel("CS02", "Elixir da Invisibilidade", 200.00m, 30, "Invisibilidade por 3 turnos"));
-            produtoEstoque.Add(new Consumivel("CS03", "Pergaminho: Bola de Fogo", 120.00m, 50, "Dano em Área (Fogo)"));
-            produtoEstoque.Add(new Consumivel("CS04", "Ração de Viagem Elfica", 5.50m, 50, "Cura 10 HP e remove Fome"));
-            produtoEstoque.Add(new Consumivel("CS05", "Lágrima de Fênix", 5000.00m, 10, "Ressurreição Completa"));
+            GerenciaLists lists = new GerenciaLists();
 
             int opcoes;
             do
@@ -80,13 +62,13 @@ namespace A_Doninha_Encantada_Painel
                                 if (escolha == "1") // Cadastro de Equipamento  
                                 {
                                     Console.Write("Escolha qual será o tipo de equipamento: "); string tipoEquipamento = Console.ReadLine();
-                                    produtoEstoque.Add(new Equipamento(id, nome, preco, quantidade, tipoEquipamento));
+                                    lists.CadastrarEquipamento(id, nome, preco, quantidade, tipoEquipamento);
                                     Console.WriteLine("\nEquipamento cadastrado com sucesso!");
                                 }
                                 else // Cadastro de Consumível
                                 {
                                     Console.Write("Escolha qual será o efeito do consumível: "); string efeito = Console.ReadLine();
-                                    produtoEstoque.Add(new Consumivel(id, nome, preco, quantidade, efeito));
+                                    lists.CadastrarConsumivel(id, nome, preco, quantidade, efeito);
                                     Console.WriteLine("\nConsumível cadastrado com sucesso!");
                                 }
                             }
@@ -94,9 +76,7 @@ namespace A_Doninha_Encantada_Painel
                             {
                                 Console.Clear();
                                 Console.Write("Digite o ID do item que deseja repor: ");
-                                string idRepor = Console.ReadLine();
-
-                                ProdutoRPG produtoRepor = produtoEstoque.Find(p => p.Id == idRepor);
+                                ProdutoRPG produtoRepor = lists.BuscarProdutoPorId(Console.ReadLine()); // Lógica para buscar o produto no estoque usando "LINQ"
 
                                 if (produtoRepor != null)
                                 {
@@ -113,8 +93,7 @@ namespace A_Doninha_Encantada_Painel
                             {
                                 Console.Clear();
                                 Console.Write("Digite o ID do item que deseja atualizar o preço: ");
-                                string idAtualizar = Console.ReadLine();
-                                ProdutoRPG produtoAtualizar = produtoEstoque.Find(p => p.Id == idAtualizar);
+                                ProdutoRPG produtoAtualizar = lists.BuscarProdutoPorId(Console.ReadLine());
 
                                 if (produtoAtualizar != null)
                                 {
@@ -153,8 +132,7 @@ namespace A_Doninha_Encantada_Painel
                         Console.Write("\nDigite o ID do item que deseja vender: ");
 
                         // Lógica para buscar o produto no estoque usando "LINQ"
-                        string idVenda = Console.ReadLine();
-                        ProdutoRPG produtoVenda = produtoEstoque.Find(p => p.Id == idVenda);
+                        ProdutoRPG produtoVenda = lists.BuscarProdutoPorId(Console.ReadLine());
 
                         
                         if(produtoVenda != null) // Produto encontrado no estoque, prosseguir com a venda
@@ -174,13 +152,15 @@ namespace A_Doninha_Encantada_Painel
 
                             if (int.TryParse(Console.ReadLine(), out int quantidadeVenda)) // Verifica se a quantidade digitada é um número válido
                             {
-                                if (produtoVenda.RegistrarVenda(quantidadeVenda))// Verifica se a venda é valida (quantidade disponível no estoque) e registra a venda
+                                try
                                 {
-                                    decimal totalVenda = produtoVenda.CalcularVenda(quantidadeVenda); 
-                                    int idVendaRegistro = vendasRealizadas.Any() ? vendasRealizadas.Max(v => v.Id) + 1 : 1; // Gerar um ID sequencial para a venda
-                                    vendasRealizadas.Add(new Venda(idVendaRegistro, produtoVenda, quantidadeVenda, totalVenda));
+                                    lists.EfetuarVenda(produtoVenda, quantidadeVenda); // Lógica para efetuar a venda usando o método "EfetuarVenda" da classe "GerenciaLists"
                                 }
-                                
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"Ocorreu um erro: {ex.Message}. Operação cancelada.");
+                                }
+
                             }
                             else // Quantidade com números inválidos, cancela a operação
                             {
@@ -218,38 +198,38 @@ namespace A_Doninha_Encantada_Painel
                                     Console.Clear();
                                     Console.WriteLine("--- Relatório de Estoque ---\n");
                                     // Lógica para gerar o relatório de estoque usando "LINQ"
-                                    if (!produtoEstoque.Any())
+                                    var estoqueAtual = lists.ObterEstoque();
+                                    if (!estoqueAtual.Any())
                                     {
                                         Console.WriteLine("O estoque está vazio...");
                                     }
                                     else
                                     {
-                                        produtoEstoque.Where(pe => pe.Quantidade > 0)
-                                        .OrderByDescending(pe => pe.Preco)
-                                        .ToList()
+                                        estoqueAtual.ToList()
                                         .ForEach(pe => Console.WriteLine(pe.ExibirDetalhes()));
                                     }
+                                        
                                     break;
 
                                 case 2:
                                     Console.Clear();
                                     Console.WriteLine("--- Relatório de Vendas ---\n");
                                     // Lógica para gerar o relatório de vendas usando "LINQ"
+                                    var vendasRealizadas = lists.ObterVendas();
                                     if (!vendasRealizadas.Any())
                                     {
-                                        Console.WriteLine("Nenhuma venda realizada ainda...");
+                                        Console.WriteLine("Nenhuma venda registrada...");
                                     }
                                     else
                                     {
-                                        vendasRealizadas.ForEach(vr => Console.WriteLine(vr.ExibirDetalhes()));
+                                        vendasRealizadas.ToList().ForEach(v => Console.WriteLine(v.ExibirDetalhes()));
                                     }
                                     break;
-
                                 case 3:
                                     Console.Clear();
                                     Console.WriteLine("--- Fechamento de Caixa ---\n");
                                     // Lógica para calcular o total do caixa usando "LINQ"
-                                    decimal totalCaixa = vendasRealizadas.Sum(v => v.TotalVenda);
+                                    decimal totalCaixa = lists.CalcularTotalCaixa();
                                     Console.WriteLine($"Total do Caixa: {totalCaixa:C}");
                                     break;
 

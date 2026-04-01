@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Project_A_Doninha_Encantada_Classes
 {
     // --- CLASSE PAI ---
-    public abstract class ProdutoRPG       
+    public abstract class ProdutoRPG
     {
         public string Id { get; private set; }
         public string Nome { get; private set; }
@@ -20,15 +20,15 @@ namespace Project_A_Doninha_Encantada_Classes
             // Validações para garantir que os dados do produto sejam válidos
             if (string.IsNullOrWhiteSpace(nome))
             {
-                throw new ArgumentException("O nome do produto não pode ser vazio.", nameof(nome));   
+                throw new ArgumentException("O nome do produto não pode ser vazio.", nameof(nome));
             }
 
-            if(preco < 0)
+            if (preco < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(preco), "O preço do produto não pode ser negativo.");
             }
-            
-            if(string.IsNullOrWhiteSpace(id))
+
+            if (string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id), "O ID do produto não pode ser vazio.");
             }
@@ -43,8 +43,8 @@ namespace Project_A_Doninha_Encantada_Classes
         public void AtualizarPreco(decimal novoPreco)
         {
             if (novoPreco < 0)
-             throw new ArgumentOutOfRangeException(nameof(novoPreco), "O preço do produto não pode ser negativo.");
-            
+                throw new ArgumentOutOfRangeException(nameof(novoPreco), "O preço do produto não pode ser negativo.");
+
             Preco = novoPreco;
             Console.WriteLine($"O preço do produto {Nome} foi atualizado para {Preco:C}.");
         }
@@ -65,15 +65,15 @@ namespace Project_A_Doninha_Encantada_Classes
         // Método para calcular o valor total de uma venda
         public virtual decimal CalcularVenda(int quantidadeVendida)
         {
-             decimal totalVenda = quantidadeVendida * Preco;
-             return totalVenda;
+            decimal totalVenda = quantidadeVendida * Preco;
+            return totalVenda;
         }
 
         // Método para registrar uma venda, verificando se há estoque suficiente antes de processar a venda e atualizar o estoque
         // Retorna true se a venda foi registrada com sucesso, ou false se não há estoque suficiente
         public virtual bool RegistrarVenda(int quantidadeVendida)
         {
-     
+
             if (quantidadeVendida <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(quantidadeVendida), "A quantidade vendida deve ser maior que zero.");
@@ -91,7 +91,7 @@ namespace Project_A_Doninha_Encantada_Classes
                 Console.WriteLine($"Não há estoque suficiente para vender {quantidadeVendida} unidades de {Nome}. Estoque atual: {Quantidade}.");
                 return false;
             }
-            
+
         }
 
         // Método para exibir os detalhes de um produto
@@ -211,6 +211,78 @@ namespace Project_A_Doninha_Encantada_Classes
             }
 
             return totalVenda;
+        }
+    }
+
+    public class GerenciaLists
+    {
+        private List<ProdutoRPG> produtoEstoque;
+        private List<Venda> vendasRealizadas;
+
+        public GerenciaLists()
+        {
+            produtoEstoque = new List<ProdutoRPG>();
+            vendasRealizadas = new List<Venda>();
+            CarregarProdutosIniciais();
+        }
+
+        public void CarregarProdutosIniciais()
+        {
+            // --- Itens para testar na loja, se quiser usar, selecionar todos com o mouse e apertar (Ctrl + ;) ---
+            // --- EQUIPAMENTOS ---
+            produtoEstoque.Add(new Equipamento("EQ01", "Espada Longa de Ferro", 150.00m, 75, "Arma Corpo-a-Corpo"));
+            produtoEstoque.Add(new Equipamento("EQ02", "Escudo de Carvalho Anfíbio", 45.00m, 112, "Defesa Mão Secundária"));
+            produtoEstoque.Add(new Equipamento("EQ03", "Armadura Escamas de Dragão", 1250.00m, 92, "Armadura Pesada"));
+            produtoEstoque.Add(new Equipamento("EQ04", "Cajado da Estrela Cadente", 320.50m, 81, "Arma Mágica"));
+            produtoEstoque.Add(new Equipamento("EQ05", "Botas Aladas de Hermes", 150.00m, 0, "Acessório Mágico"));
+
+            // --- CONSUMÍVEIS ---
+            produtoEstoque.Add(new Consumivel("CS01", "Poção de Cura Menor", 25.50m, 30, "Cura 50 HP"));
+            produtoEstoque.Add(new Consumivel("CS02", "Elixir da Invisibilidade", 200.00m, 30, "Invisibilidade por 3 turnos"));
+            produtoEstoque.Add(new Consumivel("CS03", "Pergaminho: Bola de Fogo", 120.00m, 50, "Dano em Área (Fogo)"));
+            produtoEstoque.Add(new Consumivel("CS04", "Ração de Viagem Elfica", 5.50m, 50, "Cura 10 HP e remove Fome"));
+            produtoEstoque.Add(new Consumivel("CS05", "Lágrima de Fênix", 5000.00m, 10, "Ressurreição Completa"));
+        }
+
+        public void CadastrarEquipamento(string id, string nome, decimal preco, int quantidade, string tipoEquipamento)
+        {
+            produtoEstoque.Add(new Equipamento(id, nome, preco, quantidade, tipoEquipamento));
+        }
+
+        public void CadastrarConsumivel(string id, string nome, decimal preco, int quantidade, string efeito)
+        {
+            produtoEstoque.Add(new Consumivel(id, nome, preco, quantidade, efeito));
+        }
+
+        public ProdutoRPG BuscarProdutoPorId(string id)
+        {
+            return produtoEstoque.Find(p => p.Id.Equals(id, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public void EfetuarVenda(ProdutoRPG produto, int quantidadeVendida)
+        {
+            if (produto.RegistrarVenda(quantidadeVendida))// Verifica se a venda é valida (quantidade disponível no estoque) e registra a venda
+            {
+                decimal totalVenda = produto.CalcularVenda(quantidadeVendida);
+                int idVendaRegistro = vendasRealizadas.Any() ? vendasRealizadas.Max(v => v.Id) + 1 : 1; // Gerar um ID sequencial para a venda
+                vendasRealizadas.Add(new Venda(idVendaRegistro, produto, quantidadeVendida, totalVenda));
+            }
+        }
+
+        public IEnumerable<ProdutoRPG> ObterEstoque()
+        {
+            return produtoEstoque.Where(pe => pe.Quantidade > 0)
+             .OrderByDescending(pe => pe.Preco); 
+        }
+
+        public IEnumerable<Venda> ObterVendas()
+        {
+            return vendasRealizadas;
+        }
+
+        public decimal CalcularTotalCaixa()
+        {
+            return vendasRealizadas.Sum(v => v.TotalVenda);
         }
     }
 }
