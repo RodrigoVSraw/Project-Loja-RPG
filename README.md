@@ -26,4 +26,11 @@ Este sistema foi projetado com foco em boas práticas de Engenharia de Software,
 3. Execute o projeto no Visual Studio.
 
 ## 👨‍💻 Desenvolvedor
-* **Rodrigo Vieira Santos Raw**
+
+**Rodrigo Raw**
+- Desenvolvimento Backend
+- GitHub: [@RodrigoVSraw](https://github.com/RodrigoVSraw)
+
+---
+*Projeto desenvolvido de forma independente para aprimoramento de habilidades em uso de POO C#*
+
